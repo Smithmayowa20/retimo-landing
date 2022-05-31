@@ -367,22 +367,22 @@
               </div>
               <div class="col-lg-10">
                 <fieldset>
-                  <input type="name" name="name" id="name" placeholder="Full Name" autocomplete="on" required>
+                  <input type="name" name="name" id="name" placeholder="Full Name" autocomplete="on" required="true">
                 </fieldset>
               </div>
               <div class="col-lg-10">
                 <fieldset>
-                  <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" required="">
+                  <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" required="true">
                 </fieldset>
               </div>
               <div class="col-lg-10">
                 <fieldset>
-                  <input type="text" name="phone" id="phone" placeholder="Your Phone Number" required="">
+                  <input type="text" name="phone" id="phone_number" placeholder="Your Phone Number" >
                 </fieldset>
               </div>
               <div class="col-lg-12">
                 <fieldset>
-                  <button type="submit" id="form-submit" class="main-gradient-button">Join Beta</button>
+                  <button type="submit" onclick="saveData(event)" id="form-submit" class="main-gradient-button">Join Beta</button>
                 </fieldset>
               </div>
             </div>
@@ -400,7 +400,7 @@
         <div class="col-lg-12">
           <p class="copyright">Copyright © 2022 Retimo Co., Ltd. All Rights Reserved. 
           
-          <br>Design: <a rel="sponsored" href="https://templatemo.com" target="_blank">Retimo</a></p>
+          <br>Design: <a rel="sponsored" href="https://www.retimo.co" target="_blank">Retimo</a></p>
         </div>
       </div>
     </div>
@@ -464,6 +464,50 @@
           checkSection();
         });
     </script>
+    <script src="js/main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
+  <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDRSZ3rdrvGZqtVVYivm4Wl9ceqFxYsG8A",
+    authDomain: "contentlize-552ac.firebaseapp.com",
+    databaseURL: "https://contentlize-552ac.firebaseio.com",
+    projectId: "contentlize-552ac",
+    storageBucket: "contentlize-552ac.appspot.com",
+    messagingSenderId: "646355417544",
+    appId: "1:646355417544:web:b21d76636cd91e86"
+  };
+  firebase.initializeApp(config);
+  var dbRef = firebase.database();
+  var emailRef = dbRef.ref('Retimo-Leads');
+
+  function saveData(event) {
+    console.log("Started")
+    event.preventDefault()
+    var email = document.getElementById("email").value;
+    var name = document.getElementById("name").value;
+    var phone_number = document.getElementById("phone_number").value;
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth()+1; //January is 0!
+    var year = date.getFullYear();
+    var hour = (date.getHours()<10?'0':'') + date.getHours();
+    var minute = (date.getMinutes()<10?'0':'') + date.getMinutes();
+    if (email && name) {
+      emailRef.push({ 
+        email : email,
+        name : name,
+        phone_number : phone_number,
+        date : day + '/' + month + '/' + year,
+        time : hour + ':' + minute,
+      });
+      document.getElementById("email").value = "";
+      document.getElementById("name").value = "";
+      document.getElementById("phone_number").value = "";
+      alert("Your Have Been Added To Our Beta List");
+    }
+  };
+</script>
 </body>
 
 </html>
